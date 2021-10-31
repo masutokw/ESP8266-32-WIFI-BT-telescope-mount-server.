@@ -33,8 +33,6 @@
 //#define OLED_DISPLAY
 #define OTA
 //#define FIXED_IP 21
-
-
 //mandatory
 #define EPOCH_1_1_2019 1546300800
 #define SERVER_PORT 10001
@@ -43,4 +41,5 @@
 #define MAX_SRV_CLIENTS 3
 #define SPEED_CONTROL_TICKER 10
 #define COUNTERS_POLL_TICKER 100
+//#define NIGTH_VISION
 #endif

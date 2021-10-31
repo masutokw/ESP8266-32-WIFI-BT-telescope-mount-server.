@@ -41,7 +41,6 @@
 		<Unit filename="taki.h" />
 		<Unit filename="webserver.cpp" />
 		<Unit filename="webserver.h" />
-		<Unit filename="wifipass.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

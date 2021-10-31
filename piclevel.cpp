@@ -62,8 +62,9 @@ int readcounters (char id)
     {
 
         countr = Serial.readBytes((char *)&rsp,count);
-          if ((countr == 9) && ((rsp.control == RESPONSE_OK)||(rsp.control==id)))
-        {   aux_count=rsp.counteraux;
+        if ((countr == 9) && ((rsp.control == RESPONSE_OK)||(rsp.control==id)))
+        {
+            aux_count=rsp.counteraux;
             return rsp.counter;
         }
 
@@ -148,7 +149,7 @@ setauxbackslash(char id, int back)
 
 }
 void
-changePWM(char id, unsigned char index , char value)
+changePWM(char id, unsigned char index, char value)
 {
     ASGN = M1_CHANGE_PMW_CMD;
     msg.data.buff[0] = index;
@@ -259,11 +260,11 @@ void set_motor_back_slash_mode(char id,char value)
 
 int sendcommand(void)
 {
-    #ifdef esp8266
+#ifdef esp8266
     Serial.write((char *) &msg, msg.len);
-    #else
+#else
     Serial.write((const uint8_t*) &msg, msg.len);
-     #endif
+#endif
     Serial.printf(" bytes %d\n\r", msg.len);
     return msg.len;
 
