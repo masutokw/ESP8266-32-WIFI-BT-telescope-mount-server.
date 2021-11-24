@@ -8,13 +8,6 @@
 #include "webserver.h"
 #include "taki.h"
 #include "piclevel.h"
-//Comment out undesired Feature
-//---------------------------
-//#define NUNCHUCK_CONTROL
-//#define FIXED_IP 21
-//#define OLED_DISPLAY
-//#define PAD
-//--------------------------------
 #ifdef  NUNCHUCK_CONTROL
 #include "nunchuck.h"
 #endif
@@ -45,7 +38,7 @@ HTTPUpdateServer httpUpdater;
 char buff[50] = "Waiting for connection..";
 char *pin = "0000";
 extern char  response[200];
-byte napt=0;
+byte napt = 0;
 mount_t *telescope;
 c_star volatile st_now, st_target, st_current, st_1, st_2;
 String ssi;
@@ -140,7 +133,7 @@ void setup()
 #endif
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAP("ESP-PGT", "boquerones");
-// WiFi.softAP("TUBOSAURIO", "acebuche");
+  // WiFi.softAP("TUBOSAURIO", "acebuche");
   SPIFFS.begin();
   File f = SPIFFS.open("/wifi.config", "r");
   if (f)
@@ -163,7 +156,7 @@ void setup()
     IPAddress dns;
     if (ip.fromString(f.readStringUntil('\n')) && subnet.fromString(f.readStringUntil('\n')) && gateway.fromString(f.readStringUntil('\n')) + dns.fromString(f.readStringUntil('\n'))) {
       WiFi.config(ip, gateway, subnet, dns);
-      napt=f.readStringUntil('\n').toInt();
+      napt = f.readStringUntil('\n').toInt();
     }
 
     f.close();
@@ -180,15 +173,18 @@ void setup()
   uint8_t i = 0;
   while (WiFi.status() != WL_CONNECTED && i++ < 20) delay(500);
   if  (WiFi.status() != WL_CONNECTED) WiFi.disconnect(true);
-  #ifdef NAPT
+#ifdef NAPT
   else
-   {if (napt){ dhcps_set_dns(1,WiFi.gatewayIP());
-      dhcps_set_dns(0,WiFi.dnsIP(0));
+  { if (napt) {
+      dhcps_set_dns(1, WiFi.gatewayIP());
+      dhcps_set_dns(0, WiFi.dnsIP(0));
       err_t ret = ip_napt_init(NAPT, NAPT_PORT);
-    if (ret == ERR_OK) {
-    ret = ip_napt_enable_no(SOFTAP_IF, napt);}}
+      if (ret == ERR_OK) {
+        ret = ip_napt_enable_no(SOFTAP_IF, napt);
+      }
     }
-    #endif
+  }
+#endif
 #ifdef OLED_DISPLAY
   oled_waitscr();
 #endif
@@ -219,21 +215,22 @@ void setup()
 
 
   initwebserver();
-  if (telescope->mount_mode==EQ){
-   sdt_init(telescope->longitude, telescope->time_zone);
-   speed_control_tckr.attach_ms(SPEED_CONTROL_TICKER, thread_motor, telescope);
-  counters_poll_tkr.attach_ms(COUNTERS_POLL_TICKER, thread_counter, telescope);
+  if (telescope->mount_mode == EQ) {
+    sdt_init(telescope->longitude, telescope->time_zone);
+    speed_control_tckr.attach_ms(SPEED_CONTROL_TICKER, thread_motor, telescope);
+    counters_poll_tkr.attach_ms(COUNTERS_POLL_TICKER, thread_counter, telescope);
   }
   else
-  {tak_init(telescope);
-   speed_control_tckr.attach_ms(SPEED_CONTROL_TICKER, thread_motor2, telescope);
-   counters_poll_tkr.attach_ms(COUNTERS_POLL_TICKER, track, telescope);}
+  { tak_init(telescope);
+    speed_control_tckr.attach_ms(SPEED_CONTROL_TICKER, thread_motor2, telescope);
+    counters_poll_tkr.attach_ms(COUNTERS_POLL_TICKER, track, telescope);
+  }
 
 #ifdef PAD
   pad_Init();
 #endif //PAD
 #ifdef NUNCHUCK_CONTROL
-   nunchuck_init(SDA_PIN, SCL_PIN);
+  nunchuck_init(SDA_PIN, SCL_PIN);
 #endif
 #ifdef OTA
   InitOTA();

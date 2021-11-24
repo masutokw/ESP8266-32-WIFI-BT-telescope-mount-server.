@@ -151,11 +151,9 @@ void handleConfig()
 
     content += "<tr><td>BackSlash</td><td><input type='number' step='1' name='BACK_AZ' class=\"text_red\" value='" + String(telescope->azmotor->backslash) + "'></td>";
     content += "<td><input type='number' step='1' name='BACK_ALT' class=\"text_red\" value='" + String(telescope->altmotor->backslash) + "'></td></tr>";
-    content += "<tr><td>Prescaler</td><td><input type='number' step='0.01' name='PRESCALER' class=\"text_red\" value='" + String(telescope->prescaler) + "' uSec</td></tr>";
-    content += "<tr><td>Track</td><td><input type='number' name='TRACK'  class=\"text_red\" value ='" + String(telescope->track) + "' </td></tr>";
-    // content += "<tr><td>Mount</td><td><input type='number' step='1' name='MOUNT' class=\"text_red\" value='" + String(telescope->mount_mode) + "'></td></tr></table>";
+    content += "<tr><td>Prescaler</td><td><input type='number' step='0.0001' name='PRESCALER' class=\"text_red\" value='" + String(telescope->prescaler) + "' uSec</td></tr>";
+    content += "<tr><td>EQ Track</td><td><input type='number' min='0' max='4' title='0.No track 1-Sideral 2-Solar 3-Lunar 4-King.' step='1' name='TRACK'  class=\"text_red\" value ='" + String(telescope->track) + "' </td></tr>";
     String checked = "";
-
     if (telescope->mount_mode == EQ) checked = " checked " ;
     else checked = ""  ;
     content += "<tr><td>EQ<input type='radio' name='MOUNT' value='0'  class=\"button_red\"'" + checked + "></td>";
@@ -165,7 +163,6 @@ void handleConfig()
     if (telescope->mount_mode == ALIGN) checked = " checked " ;
     else checked = ""  ;
     content += "<td>EQ2-stars<input type='radio' name='MOUNT' value='2'  class=\"button_red\"'" + checked + "></td></tr></table>";
-
 
     checked = (get_pierside(telescope) ? "West" : "East");
     content += "Meridian side " + checked + "<br>";
