@@ -1,6 +1,7 @@
 #include "time.h"
 #include "taki.h"
 #include "webserver.h"
+#include "nunchuck.h"
 #ifdef IR_CONTROL
 extern uint32_t truecode, lasti;
 extern byte cmd_map [];
@@ -150,7 +151,7 @@ void handleConfig()
 
     content += "<tr><td>BackSlash</td><td><input type='number' step='1' name='BACK_AZ' class=\"text_red\" value='" + String(telescope->azmotor->backslash) + "'></td>";
     content += "<td><input type='number' step='1' name='BACK_ALT' class=\"text_red\" value='" + String(telescope->altmotor->backslash) + "'></td></tr>";
-    content += "<tr><td>Prescaler</td><td><input type='number' name='PRESCALER' class=\"text_red\" value='" + String(telescope->prescaler) + "' uSec</td></tr>";
+    content += "<tr><td>Prescaler</td><td><input type='number' step='0.01' name='PRESCALER' class=\"text_red\" value='" + String(telescope->prescaler) + "' uSec</td></tr>";
     content += "<tr><td>Track</td><td><input type='number' name='TRACK'  class=\"text_red\" value ='" + String(telescope->track) + "' </td></tr>";
     // content += "<tr><td>Mount</td><td><input type='number' step='1' name='MOUNT' class=\"text_red\" value='" + String(telescope->mount_mode) + "'></td></tr></table>";
     String checked = "";
@@ -191,7 +192,12 @@ void handleConfig()
     content += "</form>";
     content += "<button onclick=\"location.href='/restart'\"class=\"button_red\"  type=\"button\">Restart device</button>";
     content += "<button onclick=\"location.href='/update'\" class=\"button_red\" type=\"button\">Update Firmware</button>";
+   #ifdef IR_CONTROL
     content += "<button onclick=\"location.href='/remote'\" class=\"button_red\" type=\"button\">IR Remote </button>";
+   #endif
+   #ifdef NUNCHUCK_CONTROL
+    content += "<button onclick=\"location.href='/nunchuk'\" class=\"button_red\" type=\"button\">Init Nunchuk </button>";
+   #endif
     content += "<br>Load Time :" + String(ctime(&now)) + "<br>";
     content += "<br>" + msg + " </body></html>";
     serverweb.send(200, "text/html", content);
@@ -216,6 +222,7 @@ void handlePark(void)
     content += "<button onclick=\"location.href='/'\"  type=\"button\">Back</button><br>";
     content += "</body></html>";
     serverweb.send(200, "text/html", content);
+ 
 }
 void handleHome(void)
 {
@@ -294,6 +301,18 @@ void handleRestart(void)
     serverweb.send(200, "text/html", content);
     delay(1000);
     ESP.restart();
+}
+void handleNunchuk(void)
+{
+  
+    String content =   "<html>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\"#FFFFFF\"><h2>ESP-PGT++ restarted</h2><br>";
+   
+    content += "AZ Counter:" + String(telescope->azmotor->counter) + "<br>";
+    content += "Alt Counter:" + String(telescope->altmotor->counter) + "<br>";
+    content += "<button onclick=\"location.href='/'\"  type=\"button\">Home</button><br>";
+    content += "</body></html>";
+    serverweb.send(200, "text/html", content);
+    nunchuck_init(SDA_PIN, SCL_PIN);
 }
 void handleStar( void)
 {
@@ -479,6 +498,9 @@ void initwebserver(void)
 #ifdef IR_CONTROL
     serverweb.on("/remote", handleRemote);
     serverweb.on("/IR", handleIr);
+#endif
+  #ifdef NUNCHUCK_CONTROL
+    serverweb.on("/nunchuk",handleNunchuk);
 #endif
     serverweb.onNotFound([]()
     {

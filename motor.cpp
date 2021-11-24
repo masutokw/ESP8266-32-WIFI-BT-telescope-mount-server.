@@ -46,7 +46,7 @@ void setspeed(motor_t* mt, double tspeed)
         }   ;
         postscaler++;
     }
-    else base = 65535;
+    else base = 65535-mt->locked;
     motor_set_period (mt->id, 65535 - base, sign(tspeed)*postscaler);
 }
 

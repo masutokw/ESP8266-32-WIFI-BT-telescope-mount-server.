@@ -39,8 +39,9 @@ void nunchuck_read(void)
         chuckbuffer[count] = Wire.read();
         count++;
     }
-    if (count == 6)
-    {
+    
+   if (count == 6)
+      {
         pressed = ~chuckbuffer[5] & 0x03;
         if (pressed) lastpress = pressed;
         //if (pressed) telescope->srate = pressed;

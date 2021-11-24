@@ -36,8 +36,8 @@ mount_t* create_mount(void)
     m->lat = LOCAL_LATITUDE;
     m->time_zone = TIME_ZONE;
     m->prescaler = 0.4;
-    //  init_motor( m->azmotor, AZ_ID, maxcounter, SID_RATE * SEC_TO_RAD, m->prescaler, m->maxspeed[0]);
-    //  init_motor( m->altmotor,  ALT_ID, maxcounteralt, 0, m->prescaler, m->maxspeed[1]);
+  // init_motor( m->azmotor, AZ_ID, maxcounter,SID_RATE * SEC_TO_RAD, m->prescaler, m->maxspeed[0], 400, 0);
+   // init_motor( m->altmotor,  ALT_ID, maxcounteralt, 0, m->prescaler, m->maxspeed[1], 400, 0);
     m->is_tracking = TRUE;
     m->mount_mode = ALTAZ;
     //m->mount_mode = EQ;
@@ -118,7 +118,7 @@ void thread_counter(mount_t* mt1)
                 }
                 else
                 {
-                    mt1->azmotor->targetspeed = SID_RATE * SEC_TO_RAD * mt1->track;
+                    mt1->azmotor->targetspeed = SID_RATE * SEC_TO_RAD  * mt1->track;
                     mt1->azmotor->slewing = 0;
                 }
             }
@@ -126,8 +126,8 @@ void thread_counter(mount_t* mt1)
 
         while (Serial.available())            Serial.read();
     };
-    if (sel_flag) pollcounters(254) ;
-    else pollcounters(253);
+    if (sel_flag) pollcounters(AZ_ID) ;
+    else pollcounters(ALT_ID);
     sel_flag = !sel_flag;
 }
 int goto_ra_dec(mount_t *mt, double ra, double dec)
