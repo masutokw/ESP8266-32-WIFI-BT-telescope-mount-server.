@@ -10,6 +10,7 @@
 #include "piclevel.h"
 #ifdef  NUNCHUCK_CONTROL
 #include "nunchuck.h"
+byte n_connect, last_connect;
 #endif
 #ifdef OTA
 #include <ArduinoOTA.h>
@@ -253,7 +254,12 @@ void loop()
   ir_read();
 #endif
 #ifdef  NUNCHUCK_CONTROL
-  nunchuck_read();
+  n_connect = nunchuck_read();
+  if (n_connect == 255) nunchuck_init(SDA_PIN, SCL_PIN);
+  else if (n_connect != last_connect) {
+    mount_stop(telescope, 'w'); mount_stop(telescope, 'n');
+  }
+  last_connect = n_connect;
 #endif
 
 #ifdef OLED_DISPLAY
