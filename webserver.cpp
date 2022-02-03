@@ -113,7 +113,8 @@ void handleConfig()
     }
 
     String content = "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE);
-    content += "<body  bgcolor=\"#000000\"  text=\"#5599ff\"><form action='/config' method='POST'>";
+  //  content += "<body  bgcolor=\"#000000\"  text=\"#5599ff\"><form action='/config' method='POST'>";
+  content += "<body  bgcolor=\"#000000\"  text=\""+String(LABEL_C)+"\"><form action='/config' method='POST'>";
     content += "<h2>ESP";
 #ifndef esp8266
     content += "32";
@@ -332,7 +333,7 @@ void handleStar( void)
         break;
     }
 
-    String content =   "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\"#FF4500\"><h2>Sync mode</h2><br>";
+    String content =   "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\""+String(LABEL_C)+"\"><h2>Sync mode</h2><br>";
     content += "Last selected star " + String(align_star_index) + "<br>";
     content += "Sync mode set to:" + txt + "<br><br>";
     content += "<fieldset style=\"width:15% ; border-radius:15px\"> <legend>Data</legend>";
@@ -371,7 +372,7 @@ void handleNetwork( void)
         msg += "\n" + serverweb.arg("DNS") ;
         msg += "\n" + serverweb.arg("NAPT") + "\n";
     }
-    String content = "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\"#FF6000\"><form action='/network' method='POST'><h2>Network Config</h2>";
+    String content = "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\""+String(LABEL_C)+"\"><form action='/network' method='POST'><h2>Network Config</h2>";
     content += "<fieldset style=\"width:15%;border-radius:15px\"><legend>Network</legend><table style='width:200px'>";
     content += "<tr><td>IP</td><td><input type='text' name='IP' class=\"text_red\" value='" + WiFi.localIP().toString() + "'></td></td>";
     content += "<td><td>MASK</td><td><input type='test' name='MASK'class=\"text_red\"  value='" + WiFi.subnetMask().toString() + "'></td></tr>";
@@ -426,7 +427,7 @@ void handleRemote(void)
     }
 
     //  String content =  "<html><head> <meta http-equiv='refresh' content='3'><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + " </head><body  bgcolor=\"#000000\" text=\"#FF6000\"><h2>info</h2><br>";
-    String content =  "<html><head> <style>" + String(BUTT) + String(TEXTT1) + "</style>" + String(AUTO_SIZE) + " </head><body  bgcolor=\"#000000\" text=\"#FF6000\"><h2>IR REMOTE</h2><br>";
+    String content =  "<html><head> <style>" + String(BUTT) + String(TEXTT1) + "</style>" + String(AUTO_SIZE) + " </head><body  bgcolor=\"#000000\" text=\""+String(LABEL_C)+"\"><h2>IR REMOTE</h2><br>";
     // content += "Ir Code : " + String(truecode) + "  "+String(lasti)+"  " +codes[lasti] + "  "+String(obj)+"<br>";
     content += "<form id=\"IR_Form\" action=\"/remote\">";
     content += "IrCodes: <br><table style='width:200px'>";
@@ -453,7 +454,7 @@ void handleIr(void)
 {
     char n;
 
-    String content =  "<html><head> <meta http-equiv='refresh' content='3'><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + " </head><body  bgcolor=\"#000000\" text=\"#FF6000\"><h2>info</h2><br>";
+    String content =  "<html><head> <meta http-equiv='refresh' content='3'><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + " </head><body  bgcolor=\"#000000\" text=\""+String(LABEL_C)+"\"><h2>info</h2><br>";
     content += "Ir Code : " + String(truecode) + "<br>";
     if (lasti < 31)  content += "Action : " + codes[lasti] + "<br>";
     content += "<button onclick=\"location.href='/remote'\" class=\"button_red\" type=\"button\">Remote</button><br>";
@@ -472,7 +473,7 @@ void handleMeridian(void)
         if (telescope->mount_mode == EQ) meridianflip(telescope, side);
     }
 
-    String content =  "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\"#FF6000\"><h2>ESP-PGT++ Meridian flip</h2><br>";
+    String content =  "<html><style>" + String(BUTT) + String(TEXTT) + "</style>" + String(AUTO_SIZE) + "<body  bgcolor=\"#000000\" text=\""+String(LABEL_C)+"\"><h2>ESP-PGT++ Meridian flip</h2><br>";
     content += "Pier side: " + String(get_pierside(telescope)  ? "WEST" : "EAST") + "<br>";
     content += "AZ Counter:" + String(telescope->azmotor->counter) + "<br>";
     content += "Alt Counter:" + String(telescope->altmotor->counter) + "<br>";
