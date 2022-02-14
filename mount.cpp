@@ -180,27 +180,27 @@ int mount_stop(mount_t *mt, char direction)
         {
         case 'n':
         case 's':
-            mt->altmotor->targetspeed = 0.00001;
-            do
+            mt->altmotor->targetspeed = 0.0;
+       /*     do
             {
                 yield();
                 delay(5);
                 n++;
             }
-            while ((n < top) && (fabs(mt->altmotor->current_speed) > 0.00001));
+            while ((n < top) && (fabs(mt->altmotor->current_speed) > 0.00001));*/
             break;
 
 
         case 'w':
         case 'e':
-            mt->azmotor->targetspeed = 0.00001;
-            do
+            mt->azmotor->targetspeed = 0.0;
+         /*   do
             {
                 yield();
                 delay(5);
                 n++;
             }
-            while ((n < top) && (fabs(mt->azmotor->current_speed) > 0.00001));
+            while ((n < top) && (fabs(mt->azmotor->current_speed) > 0.00001));*/
 
 
             break;
@@ -573,7 +573,7 @@ void track(mount_t *mt)
 
         //compute ecuatorial current equatorial values to be send out from LX200 protocol interface
         to_equatorial(&st_current);
-        if (sync_target )
+        if ((sync_target )&&((mt->azmotor->speed==0.0)||mt->altmotor->speed==0.0))
         {
             st_target.ra = mt->ra_target = st_current.ra;
             st_target.dec = mt->dec_target = st_current.dec;
