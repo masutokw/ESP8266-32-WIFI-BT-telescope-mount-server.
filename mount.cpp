@@ -574,6 +574,7 @@ void track(mount_t *mt)
         //compute ecuatorial current equatorial values to be send out from LX200 protocol interface
         to_equatorial(&st_current);
         if ((sync_target )&&((mt->azmotor->speed==0.0)||mt->altmotor->speed==0.0))
+      // if (sync_target )
         {
             st_target.ra = mt->ra_target = st_current.ra;
             st_target.dec = mt->dec_target = st_current.dec;
