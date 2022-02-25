@@ -40,8 +40,11 @@ byte nunchuck_read(void)
     chuckbuffer[count++] = Wire.read();
 
   }
-
+#ifdef esp8266
   if ((count == 6) && (chuckbuffer[4] != 255))
+#else
+ if (count == 6) 
+#endif 
   {
     pressed = ~chuckbuffer[5] & 0x03;
     if (pressed) lastpress = pressed;

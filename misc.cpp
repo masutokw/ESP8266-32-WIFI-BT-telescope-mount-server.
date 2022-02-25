@@ -101,15 +101,20 @@ void lxprintde(char* message, double ang)
     sprintf(message, "%c%02d %02d:%02d", c, gra, min, sec);
 
 };
+
 void lxprintra1(char *message, double ang)
 {
-    int x = ang * RAD_TO_DEG * 3600.0 / 15.0;
-    int gra = x / 3600;
-    int temp = (x % 3600);
-    int min = temp / 60;
-    int sec = temp % 60;
-    sprintf(message, "%02d:%02d:%02d#", gra, min, sec);
-    //APPEND
+  int seconds = ang * RAD_TO_DEG * 3600.0;
+  int x = trunc (seconds) / 15.0;
+  int rest = ((seconds % 15) * 2) / 3;
+  rest %= 15;
+  //rest *= 10;
+  int gra = x / 3600;
+  int temp = (x % 3600);
+  int min = temp / 60;
+  int sec = temp % 60;
+  //sprintf(message, "%02d:%02d:%02d#", gra, min, sec);
+  sprintf(message, "%02d:%02d:%02d.%d#", gra, min, sec,rest);
 };
 void lxprintra(char *message, double ang)
 {
