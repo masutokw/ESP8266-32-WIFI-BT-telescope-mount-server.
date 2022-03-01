@@ -16,6 +16,7 @@ int lastx, lasty, lastpress;
 void nunchuck_init(int sda, int scl)
 {
   Wire.begin(sda, scl);
+  Wire.setClock(100000);
   Wire.beginTransmission(ADDRESS);
   Wire.write(0xF0);
   Wire.write(0x55);
@@ -37,8 +38,8 @@ byte nunchuck_read(void)
   Wire.requestFrom(ADDRESS, 6);
   while (Wire.available())
   {
-    chuckbuffer[count++] = Wire.read();
-
+    chuckbuffer[count] = Wire.read();
+    count++;
   }
 #ifdef esp8266
   if ((count == 6) && (chuckbuffer[4] != 255))
@@ -60,7 +61,7 @@ byte nunchuck_read(void)
           // if (pressed==3) telescope->smode=1;
           if (pressed == 2) telescope->srate = 3;
           else if (lastpress == 1) gotofocuser(telescope->azmotor, focusmax, focuspeed_low);
-          else  mount_move(telescope, 'e'); //Serial.println("Left");
+          else if(pressed==0) mount_move(telescope, 'e'); //Serial.println("Left");
           break;
         case 1 :
           if (lastpress == 1)stopfocuser(telescope->azmotor);
@@ -74,7 +75,7 @@ byte nunchuck_read(void)
           //  if (pressed==3) telescope->smode=2;
           if (pressed == 2) telescope->srate = 2 ;
           else if (lastpress == 1) gotofocuser(telescope->azmotor, 0,  focuspeed_low);
-          else mount_move(telescope, 'w'); //Serial.println("Rigth");
+          else if(pressed==0) mount_move(telescope, 'w'); //Serial.println("Rigth");
           break;
         default:
           break;
@@ -92,7 +93,7 @@ byte nunchuck_read(void)
           // if (pressed==3) telescope->smode=0;
           if (pressed == 2) telescope->srate = 0;
           else if (lastpress == 1) gotofocuser(telescope->azmotor, focusmax, focuspeed);
-          else mount_move(telescope, 's'); //Serial.println("Down");
+          else if(pressed==0) mount_move(telescope, 's'); //Serial.println("Down");
           break;
         case 1 :
           if (lastpress == 1)stopfocuser(telescope->azmotor);
@@ -105,7 +106,7 @@ byte nunchuck_read(void)
         case 2 :
           if (pressed == 2) telescope->srate = 1;
           else if (lastpress == 1) gotofocuser(telescope->azmotor, 0,  focuspeed);
-          else  mount_move(telescope, 'n'); //Serial.println("Up");
+          else if(pressed==0)  mount_move(telescope, 'n'); //Serial.println("Up");
           break;
         default:
           break;

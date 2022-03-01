@@ -26,6 +26,7 @@ extern long sdt_millis;
 const char* ssid = "MyWIFI";
 const char* password = "Mypassword";
 extern volatile int state;
+int counter;
 WiFiServer server(SERVER_PORT);
 WiFiClient serverClients[MAX_SRV_CLIENTS];
 #ifdef esp8266
@@ -231,7 +232,11 @@ void setup()
   pad_Init();
 #endif //PAD
 #ifdef NUNCHUCK_CONTROL
+ pinMode(SDA_PIN, INPUT_PULLUP);
+  pinMode(SCL_PIN, INPUT_PULLUP);
   nunchuck_init(SDA_PIN, SCL_PIN);
+   pinMode(SDA_PIN, INPUT_PULLUP);
+  pinMode(SCL_PIN, INPUT_PULLUP);
 #endif
 #ifdef OTA
   InitOTA();
@@ -255,13 +260,15 @@ void loop()
 #endif
 #ifdef  NUNCHUCK_CONTROL
 
-  n_connect = nunchuck_read();
 #ifdef esp8266
-   if (n_connect == 255) nunchuck_init(SDA_PIN, SCL_PIN);
-  else if (n_connect != last_connect) {
+ n_connect = nunchuck_read();
+ if (n_connect == 255) nunchuck_init(SDA_PIN, SCL_PIN);
+ else if (n_connect != last_connect) {
     mount_stop(telescope, 'w'); mount_stop(telescope, 'n');
   }
   last_connect = n_connect;
+#else
+ if (counter++ % 10  == 5) n_connect = nunchuck_read();
  #endif
 #endif
 
