@@ -267,7 +267,7 @@ void loop()
   }
   last_connect = n_connect;
 #else
- if (counter++ % 10  == 5) n_connect = nunchuck_read();
+   if (counter++ % 5  == 3) n_connect = nunchuck_read();
  #endif
 #endif
 
