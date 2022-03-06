@@ -235,8 +235,7 @@ void setup()
  pinMode(SDA_PIN, INPUT_PULLUP);
   pinMode(SCL_PIN, INPUT_PULLUP);
   nunchuck_init(SDA_PIN, SCL_PIN);
-   pinMode(SDA_PIN, INPUT_PULLUP);
-  pinMode(SCL_PIN, INPUT_PULLUP);
+  
 #endif
 #ifdef OTA
   InitOTA();
