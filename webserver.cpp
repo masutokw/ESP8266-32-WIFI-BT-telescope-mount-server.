@@ -88,7 +88,8 @@ void handleConfig()
     msg += "\n" + serverweb.arg("BACK_AZ");
     msg += "\n" + serverweb.arg("BACK_ALT");
     msg += "\n" + serverweb.arg("MOUNT") ;
-    msg += "\n" + serverweb.arg("TRACK") + "\n";
+    msg += "\n" + serverweb.arg("TRACK") ;
+    msg += "\n" + serverweb.arg("AUTOFLIP") + "\n";
     String temp = serverweb.arg("SLEW");
     telescope->rate[3][0] = temp.toFloat();
     temp = serverweb.arg("SLEWA");
@@ -163,8 +164,8 @@ void handleConfig()
   content += "<td>ALT-AZ<input type='radio' name='MOUNT' value='1'  class=\"button_red\"'" + checked + "></td>";
   if (telescope->mount_mode == ALIGN) checked = " checked " ;
   else checked = ""  ;
-  content += "<td>EQ2-stars<input type='radio' name='MOUNT' value='2'  class=\"button_red\"'" + checked + "></td></tr></table>";
-
+  content += "<td>EQ2-stars<input type='radio' name='MOUNT' value='2'  class=\"button_red\"'" + checked + "></td></tr>";
+   content += "<tr><td>AutoFLIP:</td><td><input type='number' step='1' name='AUTOFLIP' class=\"text_red\" value='" + String(telescope->autoflip) + "'></td></tr></table>";
   checked = (get_pierside(telescope) ? "West" : "East");
   content += "Meridian side " + checked + "<br>";
   content += "<button onclick=\"location.href='/meridian?SIDE=0'\" class=\"button_red\"  type=\"button\">Meridian Flip EAST</button>";

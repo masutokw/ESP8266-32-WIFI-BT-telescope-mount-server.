@@ -27,12 +27,12 @@
 #define SCL_PIN 22
 #endif
 //optional
-#define NUNCHUCK_CONTROL
-//#define IR_CONTROL
+//#define NUNCHUCK_CONTROL
+#define IR_CONTROL
 //#define PAD
 //#define OLED_DISPLAY
 #define OTA
-//#define FIXED_IP 21
+#define FIXED_IP 21
 //mandatory
 #define EPOCH_1_1_2019 1546300800
 #define SERVER_PORT 10001
