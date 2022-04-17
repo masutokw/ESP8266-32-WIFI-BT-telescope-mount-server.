@@ -48,7 +48,9 @@ byte nunchuck_read(void)
 #ifdef esp8266
   if ((count == 6) && (chuckbuffer[4] != 255))
 #else
-  if ((count == 6) && (chuckbuffer[3] != 0) && (chuckbuffer[3] != 255))
+//  if ((count == 6) && (chuckbuffer[3] != 0) && (chuckbuffer[3] != 255))
+  if ((count == 6) && (chuckbuffer[4] != 0) && (chuckbuffer[4] != 255)&&(chuckbuffer[3] != 0) && (chuckbuffer[3] != 255)&&(chuckbuffer[5] != 129))
+
 #endif
   {
     pressed = ~chuckbuffer[5] & 0x03;
