@@ -76,6 +76,7 @@ int readcounters (char id)
         }
         //  Clean_Buffer(com_handler);
     }
+    return 0;
 }
 void
 motor_set_period (char id, int base, char post)
@@ -146,7 +147,7 @@ setauxbackslash(char id, int back)
     msg.data.dint = back;
     msg.len = 6;
     SEND_COMMAND;
-
+return 0;
 }
 void
 changePWM(char id, unsigned char index, char value)

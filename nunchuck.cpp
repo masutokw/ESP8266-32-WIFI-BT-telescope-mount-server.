@@ -29,6 +29,7 @@ void nunchuck_init(int sda, int scl)
 
   delay(1);
   lastx = lasty = 1;
+  
 }
 byte nunchuck_read(void)
 { char cls;

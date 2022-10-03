@@ -24,6 +24,7 @@ long getDecimal(float val)
   if (decPart > 0)return (decPart);       //return the decimal part of float number if it is available
   else if (decPart < 0)return ((-1) * decPart); //if negative, multiply by -1
   else if (decPart = 0)return (00);       //return 0 if decimal part of float number is not available
+  return 0;
 }
 
 

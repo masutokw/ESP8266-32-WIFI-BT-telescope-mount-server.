@@ -5,6 +5,7 @@
 #include <ESP8266WiFi.h>
 #include <lwip/napt.h>
 #include <lwip/dns.h>
+#include <LwipDhcpServer.h>
 #include <dhcpserver.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPUpdateServer.h>
@@ -15,7 +16,9 @@
 #define IR_PIN 2
 #define SDA_PIN 2
 #define SCL_PIN 0
-
+#include <FS.h>
+#include <LittleFS.h>
+#define SPIFFS LittleFS
 #else
 #include <WiFi.h>
 #include <WebServer.h>
@@ -32,7 +35,7 @@
 //#define PAD
 //#define OLED_DISPLAY
 #define OTA
-#define FIXED_IP 21
+//#define FIXED_IP 22
 //mandatory
 #define EPOCH_1_1_2019 1546300800
 #define SERVER_PORT 10001

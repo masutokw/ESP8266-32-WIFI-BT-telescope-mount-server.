@@ -30,7 +30,7 @@ struct _telescope_
     int hour,min,sec;
 
 }
-mount;
+rmount;
 extern long sdt_millis;
 extern mount_t *telescope;
 extern int  focuspeed;
@@ -47,12 +47,12 @@ void set_cmd_exe(char cmd,long date)
     switch (cmd)
     {
     case 'r':
-       if (telescope->mount_mode) mount.ra_target=date;
+       if (telescope->mount_mode) rmount.ra_target=date;
 	   else
 	    telescope->azmotor->target=telescope->ra_target=date*SEC_TO_RAD*15.0;
         break;
     case 'd':
-        if (telescope->mount_mode) mount.dec_target=date;
+        if (telescope->mount_mode) rmount.dec_target=date;
 		else
 		{  telescope->dec_target=date*SEC_TO_RAD;
         if  (telescope->dec_target<0.0)
@@ -61,29 +61,29 @@ void set_cmd_exe(char cmd,long date)
             telescope->altmotor->target=telescope->dec_target;}
         break;
     case 'a':
-        mount.alt_target=date;
+        rmount.alt_target=date;
         break;
     case 'z':
-        mount.az_target=date ;
+        rmount.az_target=date ;
         break;
     case 't':
-        mount.lat=date ;
+        rmount.lat=date ;
         telescope->lat=date/3600.0;
 
         break;
     case 'g':
-        mount.longitude=date ;
+        rmount.longitude=date ;
 		if (date <648000)
         telescope->longitude=-date/3600.0; else
 		telescope->longitude=(1296000.0-date)/3600.0;
 
         break;
     case 'L' :
-        mount.h_secs=date;
-        mount.hour=date/3600;
+        rmount.h_secs=date;
+        rmount.hour=date/3600;
         temp = (date % 3600);
-        mount.min = temp / 60;
-        mount.sec = temp % 60;
+        rmount.min = temp / 60;
+        rmount.sec = temp % 60;
         //setclock (mount.year,mount.month,mount.day,mount.hour,mount.min,mount.sec,telescope->time_zone)
         setclock (22,8,01,14,6,12,telescope->time_zone);
         break;
@@ -93,10 +93,10 @@ void set_cmd_exe(char cmd,long date)
     }
 }
 void set_date( int day,int month,int year)
-{   mount.month=month-1;
-    mount.day=day;
-    mount.year=100+year;
-    setclock (mount.year,mount.month,mount.day,mount.hour,mount.min,mount.sec,telescope->time_zone);
+{   rmount.month=month-1;
+    rmount.day=day;
+    rmount.year=100+year;
+    setclock (rmount.year,rmount.month,rmount.day,rmount.hour,rmount.min,rmount.sec,telescope->time_zone);
 	  if (telescope->mount_mode == EQ) {
     sdt_init(telescope->longitude, telescope->time_zone);
     }
@@ -111,9 +111,9 @@ void set_date( int day,int month,int year)
 }
 void set_time( int hour,int min,int sec)
 {
-    mount.min=min;
-    mount.hour=hour;
-    mount.sec=sec;
+    rmount.min=min;
+    rmount.hour=hour;
+    rmount.sec=sec;
     sprintf(tmessage,"1");APPEND;
 }
 
@@ -473,7 +473,7 @@ _match:
 	case 8:
 #line 151 "command.rl"
 	{if (telescope->mount_mode)
-					{goto_ra_dec(telescope,mount.ra_target*15.0*SEC_TO_RAD,mount.dec_target*SEC_TO_RAD);}
+					{goto_ra_dec(telescope,rmount.ra_target*15.0*SEC_TO_RAD,rmount.dec_target*SEC_TO_RAD);}
 					 else mount_slew(telescope);
 					 sprintf(tmessage,"0");APPEND;}
 	break;
@@ -534,7 +534,7 @@ _match:
 	case 22:
 #line 172 "command.rl"
 	{if (telescope->mount_mode)
-						align_sync_all(telescope,mount.ra_target,mount.dec_target);
+						align_sync_all(telescope,rmount.ra_target,rmount.dec_target);
 						else
 						{sync_eq(telescope);telescope->altmotor->slewing= telescope->azmotor->slewing=FALSE;}
 						sprintf(tmessage,"sync#");APPEND;
@@ -631,10 +631,10 @@ _again:
 
 
 //---------------------------------------------------------------------------------------------------------------------
-    if ( cs < command_first_final )
-        //	fprintf( stderr, "LX command:  error\n" );
+    if ( cs < command_first_final )   return  neg;
+		else return 0;//	fprintf( stderr, "LX command:  error\n" );
 
-        return  neg;
+       
 };
 
 

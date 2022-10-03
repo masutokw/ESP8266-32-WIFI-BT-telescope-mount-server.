@@ -19,12 +19,12 @@ byte n_connect, last_connect;
 #ifdef   IR_CONTROL
 #include "ir_control.h"
 #endif
-#include <FS.h>
+//#include <FS.h>
 const char *TZstr = "GMT-1";
 extern long sdt_millis;
 //#include "wifipass.h" //comment wifipass.h and uncomment for your  wifi parameters
-const char* ssid = "MyWIFI";
-const char* password = "Mypassword";
+const char* ssid = "wifissid";
+const char* password = "wifipass";
 extern volatile int state;
 int counter;
 WiFiServer server(SERVER_PORT);
@@ -38,7 +38,7 @@ WebServer serverweb(WEB_PORT);
 HTTPUpdateServer httpUpdater;
 #endif
 char buff[50] = "Waiting for connection..";
-const char *pin ="0000";
+const char *pin = "0000";
 extern char  response[200];
 byte napt = 0;
 mount_t *telescope;
@@ -91,8 +91,10 @@ int net_task(void)
       }
     }
     //Only one client at time, so reject
-    WiFiClient serverClient = server.available();
-    serverClient.stop();
+       if (i >= MAX_SRV_CLIENTS) {
+      //no free/disconnected spot so reject
+      server.available().stop();
+    }
   }
   //check clients for data
   for (i = 0; i < MAX_SRV_CLIENTS; i++)
@@ -178,8 +180,8 @@ void setup()
 #ifdef NAPT
   else
   { if (napt) {
-      dhcps_set_dns(1, WiFi.gatewayIP());
-      dhcps_set_dns(0, WiFi.dnsIP(0));
+      dhcpSoftAP.dhcps_set_dns(1, WiFi.gatewayIP());
+      dhcpSoftAP.dhcps_set_dns(0, WiFi.dnsIP(0));
       err_t ret = ip_napt_init(NAPT, NAPT_PORT);
       if (ret == ERR_OK) {
         ret = ip_napt_enable_no(SOFTAP_IF, napt);
@@ -232,10 +234,10 @@ void setup()
   pad_Init();
 #endif //PAD
 #ifdef NUNCHUCK_CONTROL
- pinMode(SDA_PIN, INPUT_PULLUP);
+  pinMode(SDA_PIN, INPUT_PULLUP);
   pinMode(SCL_PIN, INPUT_PULLUP);
   nunchuck_init(SDA_PIN, SCL_PIN);
-  
+
 #endif
 #ifdef OTA
   InitOTA();
@@ -260,19 +262,19 @@ void loop()
 #ifdef  NUNCHUCK_CONTROL
 
 #ifdef esp8266
- n_connect = nunchuck_read();
- if (n_connect == 255) nunchuck_init(SDA_PIN, SCL_PIN);
- else if (n_connect != last_connect) {
+  n_connect = nunchuck_read();
+  if (n_connect == 255) nunchuck_init(SDA_PIN, SCL_PIN);
+  else if (n_connect != last_connect) {
     mount_stop(telescope, 'w'); mount_stop(telescope, 'n');
   }
   last_connect = n_connect;
 #else
-   if (counter++ % 5  == 3) n_connect = nunchuck_read();
- #endif
+  if (counter++ % 5  == 3) n_connect = nunchuck_read();
+#endif
 #endif
 
 #ifdef OLED_DISPLAY
-  oledDisplay();
+  if (counter++ % 5  == 3)  oledDisplay();
 #endif
 #ifdef PAD
   doEvent();

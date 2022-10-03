@@ -2,7 +2,7 @@
 #ifdef PAD
 #include "pad.h"
 #include "mount.h"
-#define PIN_MODE  13//16
+#define PIN_MODE  16//13
 extern mount_t *telescope;
 volatile int state[4]= {1,1,1,1};
 volatile int event[4]= {3,3,3,3};
